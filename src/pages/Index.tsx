@@ -1,29 +1,36 @@
 import { RadarChart } from "@/components/RadarChart";
 
 const Index = () => {
-  // Data from the chart image - segments with filled values in the Prozesse area
+  // Exact data structure based on your specifications with 16 criteria arranged clockwise
   const chartData = [
-    { segment: "Qualitätssicherung", value: 0, maxValue: 5 },
+    // Standards quadrant (top-right) - clockwise from top
+    { segment: "Qualitätskriterien", value: 0, maxValue: 5 },
     { segment: "Struktur", value: 0, maxValue: 5 },
     { segment: "Best Practices", value: 0, maxValue: 5 },
     { segment: "Vorhandene\nRE-Tools", value: 0, maxValue: 5 },
-    { segment: "Integration &\nDokumentation", value: 0, maxValue: 5 },
-    { segment: "Entscheidungen &\nArbeitsplanung", value: 0, maxValue: 5 },
-    { segment: "Buildout Erstellung &\nSupport", value: 0, maxValue: 5 },
-    { segment: "Systematisierung\n& Einführung", value: 0, maxValue: 5 },
-    { segment: "Wissensdokumentation &\nWissensweigergabe", value: 0, maxValue: 5 },
+    
+    // Tool-Unterstützung quadrant (bottom-right) - clockwise
+    { segment: "Integration &\nDatenaustausch", value: 0, maxValue: 5 },
+    { segment: "Funktionalitäten &\nAnpassungsfähigkeit", value: 0, maxValue: 5 },
+    { segment: "Benutzerakzeptanz\n& Support", value: 0, maxValue: 5 },
+    
+    // Unternehmenskultur quadrant (bottom-left) - clockwise
+    { segment: "Sensibilisierung\n& Entwicklung", value: 0, maxValue: 5 },
+    { segment: "Wissensverfügbarkeit &\nWeitergabemechanismen", value: 0, maxValue: 5 },
     { segment: "Kompetenzaufbau", value: 0, maxValue: 5 },
     { segment: "Management-\nEngagement", value: 0, maxValue: 5 },
     { segment: "Rollen &\nVerantwortlichkeiten", value: 3, maxValue: 5 },
-    { segment: "Prozessstellung &\ndokumentation", value: 4, maxValue: 5 },
-    { segment: "Schnittstellendefinition &\nZusammenarbeit", value: 4, maxValue: 5 },
-    { segment: "Projektcontrolling &\nKommunikation", value: 3, maxValue: 5 },
-    { segment: "Vorlagen/Templates", value: 2, maxValue: 5 }
+    
+    // Prozesse quadrant (top-left) - clockwise
+    { segment: "Prozessdefinition &\n-dokumentation", value: 2, maxValue: 5 },
+    { segment: "Schnittstellen &\nZusammenarbeit", value: 2, maxValue: 5 },
+    { segment: "Prozesscontrolling &\nkontinuierliche Verbesserung", value: 1, maxValue: 5 },
+    { segment: "Vorlagen/Templates", value: 0, maxValue: 5 }
   ];
 
   const outerLabels = [
     "Standards",
-    "Tool Unterstützung", 
+    "Tool-Unterstützung", 
     "Unternehmenskultur",
     "Prozesse"
   ];
