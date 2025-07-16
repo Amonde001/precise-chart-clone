@@ -18,16 +18,17 @@ export const RadarChart: React.FC<RadarChartProps> = ({
   size = 700 
 }) => {
   const center = size / 2;
-  const outerRadius = size * 0.35;
-  const innerRadius = size * 0.08;
+  const outerRadius = size * 0.3;
+  const innerRadius = size * 0.06;
+  const borderWidth = size * 0.08;
   const gridLevels = 5;
 
-  // Calculate positions for outer labels (4 quadrants)
+  // Calculate positions for outer labels (4 quadrants) - positioned in the blue border
   const getOuterLabelPosition = (index: number) => {
-    const angles = [-45, 45, 135, -135]; // Top-right, bottom-right, bottom-left, top-left
+    const angles = [135, 45, -45, -135]; // Top-left, top-right, bottom-right, bottom-left (clockwise from top-left)
     const angle = angles[index];
     const radian = (angle * Math.PI) / 180;
-    const radius = outerRadius + 60;
+    const radius = outerRadius + borderWidth / 2;
     return {
       x: center + Math.cos(radian) * radius,
       y: center + Math.sin(radian) * radius,
@@ -97,14 +98,23 @@ export const RadarChart: React.FC<RadarChartProps> = ({
   }, '') + ' Z';
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-chart-background p-8">
+    <div className="flex justify-center items-center min-h-screen bg-gray-50 p-8">
       <div className="relative">
         <svg width={size} height={size} className="drop-shadow-lg">
-          {/* Background circle */}
+          {/* Outer blue border ring */}
           <circle
             cx={center}
             cy={center}
-            r={outerRadius + 50}
+            r={outerRadius + borderWidth}
+            fill="#3B82F6"
+            stroke="none"
+          />
+
+          {/* Inner white background */}
+          <circle
+            cx={center}
+            cy={center}
+            r={outerRadius}
             fill="white"
             stroke="none"
           />
@@ -117,9 +127,8 @@ export const RadarChart: React.FC<RadarChartProps> = ({
               cy={center}
               r={radius}
               fill="none"
-              stroke="hsl(var(--chart-grid))"
+              stroke="#E5E7EB"
               strokeWidth="1"
-              opacity="0.4"
             />
           ))}
 
@@ -131,52 +140,30 @@ export const RadarChart: React.FC<RadarChartProps> = ({
               y1={line.y1}
               x2={line.x2}
               y2={line.y2}
-              stroke="hsl(var(--chart-grid))"
-              strokeWidth="0.5"
-              opacity="0.3"
+              stroke="#E5E7EB"
+              strokeWidth="1"
             />
           ))}
 
-          {/* Quadrant separator lines */}
+          {/* Quadrant separator lines extending to blue border */}
           {quadrantLines.map((line, index) => (
             <line
               key={index}
-              x1={line.x1}
-              y1={line.y1}
-              x2={line.x2}
-              y2={line.y2}
-              stroke="hsl(var(--chart-primary))"
-              strokeWidth="3"
-              opacity="0.8"
+              x1={center + Math.cos((((index * 90) - 45) * Math.PI) / 180) * innerRadius}
+              y1={center + Math.sin((((index * 90) - 45) * Math.PI) / 180) * innerRadius}
+              x2={center + Math.cos((((index * 90) - 45) * Math.PI) / 180) * (outerRadius + borderWidth)}
+              y2={center + Math.sin((((index * 90) - 45) * Math.PI) / 180) * (outerRadius + borderWidth)}
+              stroke="#E5E7EB"
+              strokeWidth="2"
             />
           ))}
-
-          {/* Outer quadrant labels */}
-          {outerLabels.map((label, index) => {
-            const labelPos = getOuterLabelPosition(index);
-            return (
-              <text
-                key={index}
-                x={labelPos.x}
-                y={labelPos.y}
-                textAnchor="middle"
-                dominantBaseline="central"
-                fill="hsl(var(--chart-primary))"
-                fontSize="16"
-                fontWeight="700"
-                className="font-sans"
-              >
-                {label}
-              </text>
-            );
-          })}
 
           {/* Data area */}
           <path
             d={pathData}
-            fill="hsl(var(--chart-accent))"
-            fillOpacity="0.6"
-            stroke="hsl(var(--chart-accent))"
+            fill="#0F766E"
+            fillOpacity="0.8"
+            stroke="#0F766E"
             strokeWidth="2"
           />
 
@@ -189,8 +176,8 @@ export const RadarChart: React.FC<RadarChartProps> = ({
                   key={index}
                   cx={point.x}
                   cy={point.y}
-                  r="4"
-                  fill="hsl(var(--chart-accent))"
+                  r="3"
+                  fill="#0F766E"
                   stroke="white"
                   strokeWidth="2"
                 />
@@ -210,12 +197,12 @@ export const RadarChart: React.FC<RadarChartProps> = ({
                   <text
                     key={lineIndex}
                     x={labelPos.x}
-                    y={labelPos.y + (lineIndex - (lines.length - 1) / 2) * 12}
+                    y={labelPos.y + (lineIndex - (lines.length - 1) / 2) * 11}
                     textAnchor={labelPos.textAnchor}
                     dominantBaseline="central"
-                    fill="hsl(var(--chart-text))"
-                    fontSize="10"
-                    fontWeight="500"
+                    fill="#374151"
+                    fontSize="9"
+                    fontWeight="400"
                     className="font-sans"
                   >
                     {line}
@@ -225,30 +212,35 @@ export const RadarChart: React.FC<RadarChartProps> = ({
             );
           })}
 
+          {/* Outer quadrant labels in blue border */}
+          {outerLabels.map((label, index) => {
+            const labelPos = getOuterLabelPosition(index);
+            return (
+              <text
+                key={index}
+                x={labelPos.x}
+                y={labelPos.y}
+                textAnchor="middle"
+                dominantBaseline="central"
+                fill="white"
+                fontSize="14"
+                fontWeight="700"
+                className="font-sans"
+              >
+                {label}
+              </text>
+            );
+          })}
+
           {/* Center circle */}
           <circle
             cx={center}
             cy={center}
             r={innerRadius}
             fill="white"
-            stroke="hsl(var(--chart-grid))"
+            stroke="#E5E7EB"
             strokeWidth="2"
           />
-
-          {/* Level indicators */}
-          {gridCircles.map((radius, index) => (
-            <text
-              key={index}
-              x={center + radius + 5}
-              y={center - 3}
-              fill="hsl(var(--chart-text))"
-              fontSize="8"
-              fontWeight="400"
-              className="font-sans"
-            >
-              {index + 1}
-            </text>
-          ))}
         </svg>
       </div>
     </div>
